@@ -14,7 +14,7 @@ public class WaterPhysicsController : MonoBehaviour
 	private void Awake ()
 	{
 		rend = this.GetComponent<Renderer>();
-		if ( rend.GetType() == typeof (SkinnedMeshRenderer) && rootJoint == null )
+		if ( rend.GetType() == typeof (SkinnedMeshRenderer) && GameObject.Find( "Joint_0_Root" ) == null )
 		{
 			CreateJoints( (SkinnedMeshRenderer)rend );
 		}
@@ -24,8 +24,6 @@ public class WaterPhysicsController : MonoBehaviour
 	public void CreateJoints( SkinnedMeshRenderer skinnedRend )
 	{
 		// copy mesh
-		//initMesh = skinnedRend.sharedMesh.Copy();
-		//initMesh.name = "Init Plane";
 		var mesh = skinnedRend.sharedMesh.Copy();
 		mesh.name = "Skinned Plane";
 
@@ -54,9 +52,9 @@ public class WaterPhysicsController : MonoBehaviour
 
 		for ( var j = 1; j <= jointLOD; j++ )
 		{
-			var joint = new GameObject ( "Joint_" + j );
+			var joint = new GameObject ( "Joint_" + j);
 
-			// set position and parent
+			// set position and parent			
 			var pos = Vector3.zero;
 			pos.x = min.x + radius + distX * (j - 1);
 			pos.y = max.y - radius;
@@ -75,7 +73,7 @@ public class WaterPhysicsController : MonoBehaviour
 			rigid2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
 			// add collider
-			var circleColl = joint.AddComponent<CircleCollider2D>();
+			var circleColl = joint.AddComponent<CircleCollider2D> ();
 			circleColl.isTrigger = true;
 			circleColl.radius = radius;
 
@@ -83,7 +81,8 @@ public class WaterPhysicsController : MonoBehaviour
 			var springTop = joint.AddComponent<SpringJoint2D> ();
 			springTop.autoConfigureDistance = false;
 			springTop.distance = 1f;
-			springTop.connectedAnchor = new Vector2( pos.x, max.y );
+			springTop.connectedAnchor = new Vector2 ( pos.x, max.y );
+
 
 			// Set bones weights
 			for ( int v = 0; v < mesh.vertexCount; v++ )
@@ -110,7 +109,7 @@ public class WaterPhysicsController : MonoBehaviour
 			// Set bind poses
 			bindPoses[j] = joints[j].worldToLocalMatrix * this.transform.localToWorldMatrix;
 
-			// early out or add spring joints to connect joints
+			// early out or add spring joints to connect them
 			if (j <= 1) continue;
 			var springConnect = joint.AddComponent<SpringJoint2D> ();
 			springConnect.autoConfigureDistance = false;
@@ -129,7 +128,7 @@ public class WaterPhysicsController : MonoBehaviour
 	{
 		if ( rootJoint == null ) return;
 
-		DestroyImmediate ( GameObject.Find ( "Joint_0_Root" ) );	
+		DestroyImmediate ( rootJoint.gameObject );	
 		rootJoint = null;
 		rend = this.GetComponent<Renderer> ();
 		if (rend.GetType () == typeof ( SkinnedMeshRenderer ))

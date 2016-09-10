@@ -78,6 +78,7 @@
     <Compile Include="Assets\Content\Scripts\ExtensionMethods.cs" />
     <Compile Include="Assets\Content\Scripts\ForceTest.cs" />
     <Compile Include="Assets\Content\Scripts\VertexIDTest.cs" />
+    <Compile Include="Assets\Content\Scripts\WaterJointController.cs" />
     <Compile Include="Assets\Content\Scripts\WaterPhysicsController.cs" />
     <Compile Include="Assets\Content\Scripts\WaterVisualController.cs" />
   </ItemGroup>
