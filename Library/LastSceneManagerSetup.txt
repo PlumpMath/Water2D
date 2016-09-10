@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Shader_Test.unity
+- path: Assets/Content/Scenes/Shader_Test.unity
   isLoaded: 1
   isActive: 1

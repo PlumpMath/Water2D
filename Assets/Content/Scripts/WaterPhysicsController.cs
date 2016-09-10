@@ -6,6 +6,7 @@ using System.Collections;
 public class WaterPhysicsController : MonoBehaviour
 {
 	public int jointLOD = 9;
+	[Range(0f,1f)] public float density = 0.5f;
 	public bool weightedVertices = true;
 	public Mesh initMesh;
 	private Renderer rend;
@@ -77,16 +78,18 @@ public class WaterPhysicsController : MonoBehaviour
 			circleColl.isTrigger = true;
 			circleColl.radius = radius;
 
-			// add WaterJointController
-			var jointController = joint.AddComponent<WaterJointController>();
-			jointController.rigid2D = rigid2D;
-
 			// add spring joint
-			var springTop = joint.AddComponent<SpringJoint2D> ();
-			springTop.autoConfigureDistance = false;
-			springTop.distance = 1f;
-			springTop.connectedAnchor = new Vector2 ( pos.x, max.y );
+			var springBottom = joint.AddComponent<SpringJoint2D> ();
+			springBottom.autoConfigureDistance = false;
+			springBottom.distance = Mathf.Abs( Mathf.Abs( pos.y ) - Mathf.Abs( min.y ));
+			springBottom.connectedAnchor = new Vector2 ( pos.x, min.y );
+			springBottom.frequency = density;
+			springBottom.dampingRatio = density / 10;
 
+			// add WaterJointController
+			var jointController = joint.AddComponent<WaterJointController> ();
+			jointController.rigid2D = rigid2D;
+			jointController.springJoint2D = springBottom;
 
 			// Set bones weights
 			for ( int v = 0; v < mesh.vertexCount; v++ )
