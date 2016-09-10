@@ -77,6 +77,10 @@ public class WaterPhysicsController : MonoBehaviour
 			circleColl.isTrigger = true;
 			circleColl.radius = radius;
 
+			// add WaterJointController
+			var jointController = joint.AddComponent<WaterJointController>();
+			jointController.rigid2D = rigid2D;
+
 			// add spring joint
 			var springTop = joint.AddComponent<SpringJoint2D> ();
 			springTop.autoConfigureDistance = false;
