@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Water2D.CSharp.Plugins", "Water2D.CSharp.Plugins.csproj", "{06068AEB-31C0-3FE8-6A48-6B4B5BEBE4B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Water2D.CSharp", "Water2D.CSharp.csproj", "{EECDA69D-CB62-F171-6635-536F5D7AA24F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Water2D.CSharp.Editor", "Water2D.CSharp.Editor.csproj", "{870C1E66-FC10-10F1-7CE0-2C791ED1A0E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06068AEB-31C0-3FE8-6A48-6B4B5BEBE4B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06068AEB-31C0-3FE8-6A48-6B4B5BEBE4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06068AEB-31C0-3FE8-6A48-6B4B5BEBE4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06068AEB-31C0-3FE8-6A48-6B4B5BEBE4B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EECDA69D-CB62-F171-6635-536F5D7AA24F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EECDA69D-CB62-F171-6635-536F5D7AA24F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EECDA69D-CB62-F171-6635-536F5D7AA24F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EECDA69D-CB62-F171-6635-536F5D7AA24F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870C1E66-FC10-10F1-7CE0-2C791ED1A0E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870C1E66-FC10-10F1-7CE0-2C791ED1A0E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870C1E66-FC10-10F1-7CE0-2C791ED1A0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870C1E66-FC10-10F1-7CE0-2C791ED1A0E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
