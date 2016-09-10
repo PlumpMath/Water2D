@@ -118,15 +118,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Editor\VertexIDEditor.cs" />
-    <Compile Include="Assets\Scripts\Editor\WaterPhysicsEditor.cs" />
+    <Compile Include="Assets\Content\Scripts\Editor\VertexIDEditor.cs" />
+    <Compile Include="Assets\Content\Scripts\Editor\WaterPhysicsEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Materials\BumpRefraction.shader" />
-    <None Include="Assets\Materials\BumpRefractionAnimated.shader" />
-    <None Include="Assets\Materials\BumpRefractionLightRay.shader" />
-    <None Include="Assets\Materials\ShaderExtension.cginc" />
-    <None Include="Assets\Materials\VolumetricDirectionalLight.shader" />
+    <None Include="Assets\Content\Materials\BumpRefraction.shader" />
+    <None Include="Assets\Content\Materials\BumpRefractionAnimated.shader" />
+    <None Include="Assets\Content\Materials\BumpRefractionLightRay.shader" />
+    <None Include="Assets\Content\Materials\ShaderExtension.cginc" />
+    <None Include="Assets\Content\Materials\VolumetricDirectionalLight.shader" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
