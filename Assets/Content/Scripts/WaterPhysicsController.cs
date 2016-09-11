@@ -10,6 +10,7 @@ public class WaterPhysicsController : MonoBehaviour
 	public Mesh initMesh;
 	private Renderer rend;
 	private Transform rootJoint;
+	private Rigidbody2D previousRigidbody2D = null;
 
 	private void Awake ()
 	{
@@ -58,10 +59,11 @@ public class WaterPhysicsController : MonoBehaviour
 			pos.y = max.y - radius;
 
 			var jointController = joint.AddComponent<WaterJointController> ();
-			jointController.Initialize ( pos ,min, radius, density );
+			jointController.Initialize ( pos, min, radius, density, previousRigidbody2D );
 
 			joint.transform.parent = rootJoint;
 			joints[j] = joint.transform;
+			previousRigidbody2D = joint.GetComponent<Rigidbody2D>();
 
 			// Set bones weights
 			for ( int v = 0; v < mesh.vertexCount; v++ )
@@ -87,13 +89,6 @@ public class WaterPhysicsController : MonoBehaviour
 
 			// Set bind poses
 			bindPoses[j] = joints[j].worldToLocalMatrix * this.transform.localToWorldMatrix;
-
-			// early out or add spring joints to connect them
-			if (j <= 1) continue;
-			var springConnect = joint.AddComponent<SpringJoint2D> ();
-			springConnect.autoConfigureDistance = false;
-			springConnect.distance = distX;
-			springConnect.connectedBody = joints[j - 1].GetComponent<Rigidbody2D> ();
 		}
 
 		// apply to mesh and renderer

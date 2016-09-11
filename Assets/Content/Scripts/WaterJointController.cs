@@ -7,15 +7,23 @@ public class WaterJointController : MonoBehaviour
 	private Rigidbody2D rigid2D;
 	private CircleCollider2D circleCollider2D;
 	private SpringJoint2D springJoint2D;
+	private float distanceToBottom;
 
 	private void Update()
 	{
-		//if ( this.transform.position.y <= springJoint2D.connectedAnchor.y )
-		//{
-		//	var targetPos = springJoint2D.connectedAnchor;
-		//	targetPos.y += 1;
-		//	this.transform.position = targetPos;
-		//}
+		if ( rigid2D.velocity.magnitude > 0 )
+		{
+			var dist = Vector2.Distance( this.transform.position, this.springJoint2D.connectedAnchor );
+			if ( dist < distanceToBottom )
+			{
+				springJoint2D.dampingRatio = 1.5f - ( dist/ this.distanceToBottom );
+			}
+		}
+
+		if (this.transform.position.y < this.springJoint2D.connectedAnchor.y)
+		{
+			this.transform.position = this.springJoint2D.connectedAnchor + (Vector2.up * 0.1f);
+		}
 	}
 
 	private void OnTriggerEnter2D( Collider2D collision )
@@ -40,7 +48,7 @@ public class WaterJointController : MonoBehaviour
 
 	public void Initialize ( Vector2 position, Vector2 min, float radius, float density )
 	{
-
+		// set transform
 		this.transform.position = position;
 		this.transform.localRotation = Quaternion.identity;
 		this.transform.localScale = Vector3.one;
@@ -61,9 +69,19 @@ public class WaterJointController : MonoBehaviour
 		// add spring joint
 		this.springJoint2D = this.gameObject.AddComponent<SpringJoint2D> ();
 		this.springJoint2D.autoConfigureDistance = false;
-		this.springJoint2D.distance = Mathf.Abs ( Mathf.Abs ( position.y ) - Mathf.Abs ( min.y ) );
+		this.springJoint2D.distance = distanceToBottom = Mathf.Abs ( Mathf.Abs ( position.y ) - Mathf.Abs ( min.y ) );
 		this.springJoint2D.connectedAnchor = new Vector2 ( position.x, min.y );
 		this.springJoint2D.frequency = density;
 		this.springJoint2D.dampingRatio = density / 10;
+	}
+
+	public void Initialize( Vector2 position, Vector2 min, float radius, float density, Rigidbody2D previousRigidbody )
+	{
+		Initialize( position, min, radius, density );
+		if ( previousRigidbody == null ) return;
+		var springConnect = this.gameObject.AddComponent<SpringJoint2D> ();
+		springConnect.autoConfigureDistance = false;
+		springConnect.distance = radius * 2;
+		springConnect.connectedBody = previousRigidbody;
 	}
 }
