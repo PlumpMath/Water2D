@@ -8,15 +8,19 @@ public class WaterJointController : MonoBehaviour
 	private CircleCollider2D circleCollider2D;
 	private SpringJoint2D springJoint2D;
 	private float distanceToBottom;
+	//private float maxVelocity = 10f;
 
 	private void Update()
 	{
 		if ( rigid2D.velocity.magnitude > 0 )
 		{
-			var dist = Vector2.Distance( this.transform.position, this.springJoint2D.connectedAnchor );
-			if ( dist < distanceToBottom )
+			//rigid2D.velocity = Vector2.ClampMagnitude ( rigid2D.velocity, maxVelocity );
+			var dist = Vector2.Distance ( this.transform.position, this.springJoint2D.connectedAnchor );
+			if (dist < distanceToBottom)
 			{
-				springJoint2D.dampingRatio = 1.5f - ( dist/ this.distanceToBottom );
+				springJoint2D.dampingRatio = (1 - (0.5f + (dist / distanceToBottom))) * 10;
+				if (this.name == "Joint_5")
+					Debug.Log ( this.name + " Damping Ratio: " + springJoint2D.dampingRatio );
 			}
 		}
 
