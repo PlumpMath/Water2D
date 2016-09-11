@@ -1,13 +1,12 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(Renderer))]
 public class WaterPhysicsController : MonoBehaviour
 {
 	public int jointLOD = 9;
 	[Range(0f,1f)] public float density = 0.5f;
-	public bool weightedVertices = true;
+	public bool useWeightedVertices = true;
 	public Mesh initMesh;
 	private Renderer rend;
 	private Transform rootJoint;
@@ -31,10 +30,8 @@ public class WaterPhysicsController : MonoBehaviour
 		var min = mesh.vertices.GetMin( this.transform );
 		var max = mesh.vertices.GetMax( this.transform );
 		var width = max.x - min.x;
-		//var height = max.y - min.y;
 		var distX = width / jointLOD;
 		var radius = distX / 2;
-		//Debug.Log( "Width: " + width + "  DistX: " + distX + "  MinX: " + min.x);
 
 		// Set joint variables
 		var joints = new Transform[jointLOD + 1];
@@ -54,42 +51,17 @@ public class WaterPhysicsController : MonoBehaviour
 		for ( var j = 1; j <= jointLOD; j++ )
 		{
 			var joint = new GameObject ( "Joint_" + j);
-
+			
 			// set position and parent			
 			var pos = Vector3.zero;
 			pos.x = min.x + radius + distX * (j - 1);
 			pos.y = max.y - radius;
-			joint.transform.position = pos;
-			joint.transform.localRotation = Quaternion.identity;
-			joint.transform.localScale = Vector3.one;
+
+			var jointController = joint.AddComponent<WaterJointController> ();
+			jointController.Initialize ( pos ,min, radius, density );
+
 			joint.transform.parent = rootJoint;
 			joints[j] = joint.transform;
-
-			// add rigidbody
-			var rigid2D = joint.AddComponent<Rigidbody2D> ();
-			rigid2D.mass = 0;
-			rigid2D.drag = 0;
-			rigid2D.angularDrag = 0;
-			rigid2D.gravityScale = 0;
-			rigid2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-
-			// add collider
-			var circleColl = joint.AddComponent<CircleCollider2D> ();
-			circleColl.isTrigger = true;
-			circleColl.radius = radius;
-
-			// add spring joint
-			var springBottom = joint.AddComponent<SpringJoint2D> ();
-			springBottom.autoConfigureDistance = false;
-			springBottom.distance = Mathf.Abs( Mathf.Abs( pos.y ) - Mathf.Abs( min.y ));
-			springBottom.connectedAnchor = new Vector2 ( pos.x, min.y );
-			springBottom.frequency = density;
-			springBottom.dampingRatio = density / 10;
-
-			// add WaterJointController
-			var jointController = joint.AddComponent<WaterJointController> ();
-			jointController.rigid2D = rigid2D;
-			jointController.springJoint2D = springBottom;
 
 			// Set bones weights
 			for ( int v = 0; v < mesh.vertexCount; v++ )
@@ -101,7 +73,7 @@ public class WaterPhysicsController : MonoBehaviour
 				     vertWorldPos.x <= joints[j].position.x + radius )
 				{
 					var vertDistX = 1f;
-					if ( weightedVertices )
+					if ( useWeightedVertices )
 					{
 						vertDistX = Mathf.Abs( Mathf.Abs( joints[j].position.x ) - Mathf.Abs( vertWorldPos.x ) );
 					}
