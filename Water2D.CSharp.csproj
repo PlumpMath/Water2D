@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Content\Scripts\ExtensionMethods.cs" />
+    <Compile Include="Assets\Content\Scripts\TestMeshGenerator.cs" />
     <Compile Include="Assets\Content\Scripts\TestSphereController.cs" />
     <Compile Include="Assets\Content\Scripts\WaterJointController.cs" />
     <Compile Include="Assets\Content\Scripts\WaterPhysicsController.cs" />
