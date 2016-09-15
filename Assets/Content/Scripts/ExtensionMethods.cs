@@ -90,7 +90,7 @@ public static class ExtensionMethods
 		else
 		{
 			Debug.LogError( "Mesh to copy equals null" );
-			return mesh;
+			return null;
 		}
 	}
 }
