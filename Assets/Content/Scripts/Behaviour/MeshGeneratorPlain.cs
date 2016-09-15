@@ -3,17 +3,15 @@ using System.Collections;
 
 public class MeshGeneratorPlain : MeshGenerator
 {
+	public float width = 1f;
+	public float height = 1f;
+
 	public override void CreateMesh( SkinnedMeshRenderer rend )
 	{
 		base.Clear();
 
-		// create parameter and new mesh
-		var min = rend.sharedMesh.vertices.GetMin();
-		var max = rend.sharedMesh.vertices.GetMax();
-		var width = Mathf.Abs( max.x - min.x );
-		var height = Mathf.Abs( max.y - min.y );
-		var distX = width / (base.LOD + 1);
-
+		// create parameter and new meshs
+		var deltaDistance = width / (base.LOD + 1);
 		var mesh = new Mesh { name = "Generated Plain" };
 
 		// calculate vertices
@@ -21,13 +19,13 @@ public class MeshGeneratorPlain : MeshGenerator
 		int halfLength = vertices.Length / 2;
 		for ( var i = 0; i <= halfLength; i++ )
 		{
-			vertices[i] = new Vector3 ( min.x + distX * i, min.y, min.z );
+			vertices[i] = new Vector3 ( -width/2 + deltaDistance * i, -height/2, 0 );
 		}
 		
 		base.hull = new int[ halfLength ];
 		for ( var j = 0; j < halfLength; j++ )
 		{
-			vertices[j + halfLength] = new Vector3 ( min.x + distX * j, max.y, max.z );
+			vertices[j + halfLength] = new Vector3 ( -width/2 + deltaDistance * j, height/2, 0 );
 			base.hull[j] = j;
 		}
 
@@ -45,12 +43,12 @@ public class MeshGeneratorPlain : MeshGenerator
 		var uvs = new Vector2[ vertices.Length ];
 		for ( var k = 0; k < uvs.Length; k++ )
 		{
-			var dX = vertices[k].x - min.x;
-			var dY = vertices[k].y - min.y;
+			var dX = vertices[k].x - width/2;
+			var dY = vertices[k].y - height/2;
 			uvs[k] = new Vector2( dX / width,  dY / height );
 		}
 
-		// apply to mesh
+		// apply to mesh and renderer
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
 		mesh.uv = uvs;

@@ -4,9 +4,9 @@ using System.Collections;
 [RequireComponent ( typeof ( SkinnedMeshRenderer ) )]
 public abstract class MeshGenerator : MonoBehaviour
 {
+	[Tooltip("Level of Detail. Sets how dense the mesh will be.")]
 	public int LOD = 3;
-	public Mesh initMesh;
-	protected int[] hull;
+	[HideInInspector] public int[] hull;
 	private SkinnedMeshRenderer rendererP;
 	private SkinnedMeshRenderer Renderer
 	{
@@ -19,7 +19,6 @@ public abstract class MeshGenerator : MonoBehaviour
 			return rendererP = this.GetComponent<SkinnedMeshRenderer>();
 		}
 	}
-
 
 	public void Awake()
 	{
@@ -35,7 +34,7 @@ public abstract class MeshGenerator : MonoBehaviour
 
 	public void Clear()
 	{
-		Renderer.sharedMesh = initMesh;
+		Renderer.sharedMesh = MeshPrimitives.Quad;
 		var children = this.GetComponentsInChildren<Transform>();
 		for ( int i = 1; i < children.Length; i++ )
 		{
