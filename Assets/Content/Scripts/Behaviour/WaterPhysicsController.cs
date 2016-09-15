@@ -23,16 +23,15 @@ public class WaterPhysicsController : MonoBehaviour
 	{
 		// generates mesh
 		var meshGenerator = manager.GetMeshGenerator( this.transform );
-		meshGenerator.LOD = this.LOD * verticesPerJoint;
 		meshGenerator.CreateMesh( skinnedRend );
 		var mesh = skinnedRend.sharedMesh;
-
+		
 		var min = mesh.vertices.GetMin( this.transform );
 		var max = mesh.vertices.GetMax( this.transform );
 		var width = max.x - min.x;
 		var distX = width / LOD;
 		var radius = distX / 2;
-
+		
 		// Set joint variables
 		var joints = new Transform[LOD + 1];
 		var weights = new BoneWeight[mesh.vertexCount];
@@ -102,7 +101,7 @@ public class WaterPhysicsController : MonoBehaviour
 	public void Clear()
 	{
 		var r = this.GetComponent<SkinnedMeshRenderer> ();
-		r.sharedMesh = Primitives.Plane;
+		r.sharedMesh = Primitives.Quad;
 		r.rootBone = null;
 		if ( rootJoint != null )
 		{

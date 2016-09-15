@@ -125,6 +125,7 @@
     <None Include="Assets\Content\Materials\Shader\BumpRefraction.shader" />
     <None Include="Assets\Content\Materials\Shader\BumpRefractionAnimated.shader" />
     <None Include="Assets\Content\Materials\Shader\BumpRefractionLightRay.shader" />
+    <None Include="Assets\Content\Materials\Shader\DebugUV.shader" />
     <None Include="Assets\Content\Materials\Shader\ShaderExtension.cginc" />
     <None Include="Assets\Content\Materials\Shader\VolumetricDirectionalLight.shader" />
     <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />

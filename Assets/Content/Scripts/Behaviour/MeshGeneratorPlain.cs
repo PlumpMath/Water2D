@@ -43,9 +43,10 @@ public class MeshGeneratorPlain : MeshGenerator
 		var uvs = new Vector2[ vertices.Length ];
 		for ( var k = 0; k < uvs.Length; k++ )
 		{
-			var dX = vertices[k].x - width/2;
-			var dY = vertices[k].y - height/2;
+			var dX = vertices[k].x - vertices[0].x;
+			var dY = vertices[k].y - vertices[0].y;
 			uvs[k] = new Vector2( dX / width,  dY / height );
+			Debug.Log(  "Vertex:" + vertices[k] + " uv:  " + uvs[k].x + ", " + uvs[k].y );
 		}
 
 		// apply to mesh and renderer
