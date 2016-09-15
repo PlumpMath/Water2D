@@ -14,7 +14,7 @@ public class MeshGeneratorPlain : MeshGenerator
 		var height = Mathf.Abs( max.y - min.y );
 		var distX = width / (base.LOD + 1);
 
-		var mesh = new Mesh { name = "Generated Plain Mesh" };
+		var mesh = new Mesh { name = "Generated Plain" };
 
 		// calculate vertices
 		var vertices = new Vector3[base.LOD * 2 + 4];
@@ -45,7 +45,9 @@ public class MeshGeneratorPlain : MeshGenerator
 		var uvs = new Vector2[ vertices.Length ];
 		for ( var k = 0; k < uvs.Length; k++ )
 		{
-			uvs[k] = new Vector2( Mathf.Abs( vertices[k].x) / height, Mathf.Abs(vertices[k].y / width) );
+			var dX = vertices[k].x - min.x;
+			var dY = vertices[k].y - min.y;
+			uvs[k] = new Vector2( dX / width,  dY / height );
 		}
 
 		// apply to mesh
@@ -54,7 +56,5 @@ public class MeshGeneratorPlain : MeshGenerator
 		mesh.uv = uvs;
 		mesh.RecalculateNormals();
 		rend.sharedMesh = mesh;
-
-		//this.transform.localScale = Vector3.one;
 	}
 }

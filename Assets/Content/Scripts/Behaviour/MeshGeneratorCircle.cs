@@ -15,7 +15,7 @@ public class MeshGeneratorCircle : MeshGenerator
 		var matrix = Matrix4x4.TRS( Vector3.zero, rotation, Vector3.one );
 		hull = new int[base.LOD];
 
-		var mesh = new Mesh { name = "Generated Circle Mesh" };
+		var mesh = new Mesh { name = "Generated Circle" };
 
 		// set vertices
 		var vertices = new Vector3[base.LOD + 1];
@@ -43,7 +43,14 @@ public class MeshGeneratorCircle : MeshGenerator
 		triangles[triangles.Length - 1] = 1;
 
 		// set uvs
-		var uvs = new Vector2[0];
+		var uvs = new Vector2[vertices.Length];
+		for (var k = 0; k < uvs.Length; k++)
+		{
+			var dX = vertices[k].x - min.x;
+			var dY = vertices[k].y - min.y;
+			uvs[k] = new Vector2 ( dX / (radius * 2), dY / (radius * 2) );
+			//Debug.Log( "Vert: " + vertices[k] + " UV: " + uvs[k] );
+		}
 
 		// apply to mesh
 		mesh.vertices = vertices;
