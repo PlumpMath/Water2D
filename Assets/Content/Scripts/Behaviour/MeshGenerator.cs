@@ -36,5 +36,10 @@ public abstract class MeshGenerator : MonoBehaviour
 	public void Clear()
 	{
 		Renderer.sharedMesh = initMesh;
+		var children = this.GetComponentsInChildren<Transform>();
+		for ( int i = 1; i < children.Length; i++ )
+		{
+			DestroyImmediate( children[i].gameObject );
+		}
 	}
 }

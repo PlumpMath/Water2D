@@ -5,14 +5,16 @@ public class MeshGeneratorPlain : MeshGenerator
 {
 	public override void CreateMesh( SkinnedMeshRenderer rend )
 	{
-		// create new mesh
-		var min = rend.sharedMesh.vertices.GetMin( this.transform );
-		var max = rend.sharedMesh.vertices.GetMax( this.transform );
+		base.Clear();
+
+		// create parameter and new mesh
+		var min = rend.sharedMesh.vertices.GetMin();
+		var max = rend.sharedMesh.vertices.GetMax();
 		var width = Mathf.Abs( max.x - min.x );
 		var height = Mathf.Abs( max.y - min.y );
 		var distX = width / (base.LOD + 1);
 
-		var mesh = new Mesh { name = "Procedural Plain Mesh" };
+		var mesh = new Mesh { name = "Generated Plain Mesh" };
 
 		// calculate vertices
 		var vertices = new Vector3[base.LOD * 2 + 4];
@@ -53,6 +55,6 @@ public class MeshGeneratorPlain : MeshGenerator
 		mesh.RecalculateNormals();
 		rend.sharedMesh = mesh;
 
-		this.transform.localScale = Vector3.one;
+		//this.transform.localScale = Vector3.one;
 	}
 }

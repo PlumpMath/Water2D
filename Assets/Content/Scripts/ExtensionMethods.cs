@@ -74,6 +74,16 @@ public static class ExtensionMethods
 		return targetVec;
 	}
 
+	public static Vector3 Rotate ( this Vector3 vec, float angle )
+	{
+		return vec.Rotate( Vector3.forward, angle );
+	}
+
+	public static Vector3 Rotate(this Vector3 vec, Vector3 forward, float angle)
+	{
+		return vec;
+	}
+
 	public static Mesh Copy( this Mesh mesh )
 	{
 		if ( mesh != null )
