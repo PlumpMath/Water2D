@@ -1,41 +1,48 @@
 ﻿using System;
+using System.Linq.Expressions;
 using UnityEngine;
 
-[RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(SkinnedMeshRenderer))]
 public class WaterPhysicsController : MonoBehaviour
 {
-	public int jointLOD = 9;
-	[Range(0f,1f)] public float density = 0.5f;
 	public bool useWeightedVertices = true;
-	public Mesh initMesh;
-	private Renderer rend;
+	public int LOD = 9;
+	public int verticesPerJoint = 1;
+	[Range ( 0f, 1f )] public float damping = 0.5f;
+
 	private Transform rootJoint;
 	private Rigidbody2D previousRigidbody2D = null;
+	private SkinnedMeshRenderer rend;
+	public SkinnedMeshRenderer Rend
+	{
+		get
+		{
+			if ( rend != null )
+			{
+				return rend;
+			}
+			return rend = this.GetComponent<SkinnedMeshRenderer>();
+		}
+	}
 
 	private void Awake ()
 	{
-		rend = this.GetComponent<Renderer>();
-		if ( rend.GetType() == typeof (SkinnedMeshRenderer) && GameObject.Find( "Joint_0_Root" ) == null )
-		{
-			CreateJoints( (SkinnedMeshRenderer)rend );
-		}
+		CreateJoints( Rend );
 	}
 
 	// Creates and applies skinned joints to the mesh in passed renderer
 	public void CreateJoints( SkinnedMeshRenderer skinnedRend )
 	{
-		// copy mesh
-		var mesh = skinnedRend.sharedMesh.Copy();
-		mesh.name = "Skinned Plane";
+		var mesh = new Mesh { name = "Skinned Plane" };
 
 		var min = mesh.vertices.GetMin( this.transform );
 		var max = mesh.vertices.GetMax( this.transform );
 		var width = max.x - min.x;
-		var distX = width / jointLOD;
+		var distX = width / LOD;
 		var radius = distX / 2;
 
 		// Set joint variables
-		var joints = new Transform[jointLOD + 1];
+		var joints = new Transform[LOD + 1];
 		var weights = new BoneWeight[mesh.vertexCount];
 		var bindPoses = new Matrix4x4[joints.Length];
 
@@ -49,7 +56,7 @@ public class WaterPhysicsController : MonoBehaviour
 		joints[0] = rootJoint;
 		bindPoses[0] = rootJoint.worldToLocalMatrix * this.transform.localToWorldMatrix;
 
-		for ( var j = 1; j <= jointLOD; j++ )
+		for ( var j = 1; j <= LOD; j++ )
 		{
 			var joint = new GameObject ( "Joint_" + j);
 			
@@ -59,7 +66,7 @@ public class WaterPhysicsController : MonoBehaviour
 			pos.y = max.y - radius;
 
 			var jointController = joint.AddComponent<WaterJointController> ();
-			jointController.Initialize ( pos, min, radius, density, previousRigidbody2D );
+			jointController.Initialize ( pos, min, radius, damping, previousRigidbody2D );
 
 			joint.transform.parent = rootJoint;
 			joints[j] = joint.transform;
@@ -100,16 +107,13 @@ public class WaterPhysicsController : MonoBehaviour
 
 	public void Clear()
 	{
-		if ( rootJoint == null ) return;
-
-		DestroyImmediate ( rootJoint.gameObject );	
-		rootJoint = null;
-		rend = this.GetComponent<Renderer> ();
-		if (rend.GetType () == typeof ( SkinnedMeshRenderer ))
+		var r = this.GetComponent<SkinnedMeshRenderer> ();
+		r.sharedMesh = Primitives.Quad;
+		r.rootBone = null;
+		var children = this.GetComponentsInChildren<Transform>();
+		for ( int i = 1; i < children.Length; i++ )
 		{
-			var r = (SkinnedMeshRenderer)rend;
-			r.sharedMesh = initMesh;
-			r.rootBone = null;
+			DestroyImmediate( children[i].gameObject );
 		}
 		GC.Collect ();
 	}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class MeshPrimitives
+public static class Primitives
 {
 	// singelton check
 	private static Mesh quad;
@@ -25,7 +25,7 @@ public static class MeshPrimitives
 	{
 		return new Mesh
 		{
-			name = "MeshPrimitives Quad",
+			name = "Primitives Quad",
 			vertices = new Vector3[]
 			{
 				new Vector3( -0.5f, -0.5f, 0 ),

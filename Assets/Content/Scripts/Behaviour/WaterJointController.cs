@@ -50,7 +50,7 @@ public class WaterJointController : MonoBehaviour
 		rigid2D.AddForce( Vector2.up * force );
 	}
 
-	public void Initialize ( Vector2 position, Vector2 min, float radius, float density )
+	public void Initialize ( Vector2 position, Vector2 min, float radius, float damping )
 	{
 		// set transform
 		this.transform.position = position;
@@ -75,13 +75,13 @@ public class WaterJointController : MonoBehaviour
 		this.springJoint2D.autoConfigureDistance = false;
 		this.springJoint2D.distance = distanceToBottom = Mathf.Abs ( Mathf.Abs ( position.y ) - Mathf.Abs ( min.y ) );
 		this.springJoint2D.connectedAnchor = new Vector2 ( position.x, min.y );
-		this.springJoint2D.frequency = density;
-		this.springJoint2D.dampingRatio = density / 10;
+		this.springJoint2D.frequency = damping;
+		this.springJoint2D.dampingRatio = damping / 10;
 	}
 
-	public void Initialize( Vector2 position, Vector2 min, float radius, float density, Rigidbody2D previousRigidbody )
+	public void Initialize( Vector2 position, Vector2 min, float radius, float damping, Rigidbody2D previousRigidbody )
 	{
-		Initialize( position, min, radius, density );
+		Initialize( position, min, radius, damping );
 		if ( previousRigidbody == null ) return;
 		var springConnect = this.gameObject.AddComponent<SpringJoint2D> ();
 		springConnect.autoConfigureDistance = false;

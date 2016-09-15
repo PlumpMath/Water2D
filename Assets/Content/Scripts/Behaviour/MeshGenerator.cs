@@ -34,7 +34,7 @@ public abstract class MeshGenerator : MonoBehaviour
 
 	public void Clear()
 	{
-		Renderer.sharedMesh = MeshPrimitives.Quad;
+		Renderer.sharedMesh = Primitives.Quad;
 		var children = this.GetComponentsInChildren<Transform>();
 		for ( int i = 1; i < children.Length; i++ )
 		{
