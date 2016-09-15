@@ -8,7 +8,6 @@ public abstract class MeshGenerator : MonoBehaviour
 	[Tooltip("Level of Detail. Sets how dense the mesh will be.")]
 	public int LOD = 3;
 	[HideInInspector] public int[] hull;
-	public ComponentManager manager = new ComponentManager();
 
 	public void Awake()
 	{
@@ -17,18 +16,21 @@ public abstract class MeshGenerator : MonoBehaviour
 
 	public void CreateMesh()
 	{
-		CreateMesh( manager.GetSkinnedMeshRenderer( this.transform ) );
+		CreateMesh( this.GetComponent<SkinnedMeshRenderer>() );
 	}
-	
+
 	public abstract void CreateMesh(SkinnedMeshRenderer rend);
 
 	public void Clear()
 	{
-		manager.GetSkinnedMeshRenderer( this.transform ).sharedMesh = Primitives.Quad;
+		this.GetComponent<SkinnedMeshRenderer>().sharedMesh = Primitives.Quad;
 		var children = this.GetComponentsInChildren<Transform>();
 		for ( int i = 1; i < children.Length; i++ )
 		{
-			DestroyImmediate( children[i].gameObject );
+			if ( children[i] != null )
+			{
+				DestroyImmediate( children[i].gameObject );
+			}
 		}
 		GC.Collect();
 	}

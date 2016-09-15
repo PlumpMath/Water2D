@@ -8,21 +8,15 @@ public class WaterPhysicsController : MonoBehaviour
 	public int LOD = 9;
 	public int verticesPerJoint = 1;
 	[Range ( 0f, 1f )] public float damping = 0.5f;
-	public ComponentManager manager = new ComponentManager();
 
 	private Transform rootJoint;
 	private Rigidbody2D previousRigidbody2D = null;
-
-	private void Awake ()
-	{
-		CreateJoints( manager.GetSkinnedMeshRenderer( this.transform ) );
-	}
 
 	// Creates and applies skinned joints to the mesh in passed renderer
 	public void CreateJoints( SkinnedMeshRenderer skinnedRend )
 	{
 		// generates mesh
-		var meshGenerator = manager.GetMeshGenerator( this.transform );
+		var meshGenerator = this.GetComponent<MeshGenerator>();
 		meshGenerator.CreateMesh( skinnedRend );
 		var mesh = skinnedRend.sharedMesh;
 		

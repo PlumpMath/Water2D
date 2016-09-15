@@ -6,11 +6,7 @@ public class MeshGeneratorCircle : MeshGenerator
 
 	public override void CreateMesh( SkinnedMeshRenderer rend )
 	{
-		Clear();
-
 		// create parameter and new mesh
-		//var min = rend.sharedMesh.vertices.GetMin();
-		//var max = rend.sharedMesh.vertices.GetMax();
 		var angle = 360f / base.LOD;
 		var rotation = Quaternion.AngleAxis( angle, this.transform.forward * -1 );
 		var matrix = Matrix4x4.TRS( Vector3.zero, rotation, Vector3.one );

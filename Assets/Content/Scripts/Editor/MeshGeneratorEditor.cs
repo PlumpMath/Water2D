@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEditor;
 
 [CustomEditor(typeof(MeshGenerator), true)]
-public class PlainMeshEditor : Editor
+public class MeshGeneratorEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
@@ -14,6 +14,7 @@ public class PlainMeshEditor : Editor
 		if (generator == null) return;
 		if ( GUILayout.Button( "Create Mesh" ) )
 		{
+			generator.Clear();
 			generator.CreateMesh();
 		}
 

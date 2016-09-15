@@ -4,15 +4,26 @@
 public class WaterJointController : MonoBehaviour
 {
 	public float forceScalar = 0.005f;
-	private Rigidbody2D rigid2D;
 	private CircleCollider2D circleCollider2D;
 	private SpringJoint2D springJoint2D;
 	private float distanceToBottom;
 	//private float maxVelocity = 10f;
+	private Rigidbody2D rigid2D;
+	private Rigidbody2D Rigid2D
+	{
+		get
+		{
+			if ( rigid2D != null )
+			{
+				return rigid2D;
+			}
+			return rigid2D = this.GetComponent<Rigidbody2D>();
+		}
+	}
 
 	private void Update()
 	{
-		if ( rigid2D.velocity.magnitude > 0 )
+		if ( Rigid2D.velocity.magnitude > 0 )
 		{
 			//rigid2D.velocity = Vector2.ClampMagnitude ( rigid2D.velocity, maxVelocity );
 			var dist = Vector2.Distance ( this.transform.position, this.springJoint2D.connectedAnchor );
@@ -44,7 +55,7 @@ public class WaterJointController : MonoBehaviour
 			Debug.LogWarning( collision.name + " has no Rigidbody2D assigned." );
 			return;
 		}
-
+		Debug.Log( this.name + " hit " + collision.name );
 		// apply impact force
 		var force = collision.attachedRigidbody.velocity.y * forceScalar;
 		rigid2D.AddForce( Vector2.up * force );

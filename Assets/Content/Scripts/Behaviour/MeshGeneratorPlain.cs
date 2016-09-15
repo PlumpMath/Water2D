@@ -8,8 +8,6 @@ public class MeshGeneratorPlain : MeshGenerator
 
 	public override void CreateMesh( SkinnedMeshRenderer rend )
 	{
-		base.Clear();
-
 		// create parameter and new meshs
 		var deltaDistance = width / (base.LOD + 1);
 		var mesh = new Mesh { name = "Generated Plain" };
@@ -46,7 +44,7 @@ public class MeshGeneratorPlain : MeshGenerator
 			var dX = vertices[k].x - vertices[0].x;
 			var dY = vertices[k].y - vertices[0].y;
 			uvs[k] = new Vector2( dX / width,  dY / height );
-			Debug.Log(  "Vertex:" + vertices[k] + " uv:  " + uvs[k].x + ", " + uvs[k].y );
+			//Debug.Log(  "Vertex:" + vertices[k] + " uv:  " + uvs[k].x + ", " + uvs[k].y );
 		}
 
 		// apply to mesh and renderer
