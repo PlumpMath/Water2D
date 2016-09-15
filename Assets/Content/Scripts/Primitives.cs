@@ -25,7 +25,7 @@ public static class Primitives
 	{
 		return new Mesh
 		{
-			name = "Primitives Quad",
+			name = "Primitive Quad",
 			vertices = new Vector3[]
 			{
 				new Vector3( -0.5f, -0.5f, 0 ),
@@ -42,5 +42,21 @@ public static class Primitives
 				new Vector2( 1f, 0 )
 			}
 		};
+	}
+
+	private static Mesh plane;
+	public static Mesh Plane
+	{
+		get
+		{
+			if ( plane != null )
+			{
+				return plane;
+			}
+			var go = GameObject.CreatePrimitive( PrimitiveType.Plane );
+			var mesh = go.GetComponent<MeshFilter>().sharedMesh;
+			Object.DestroyImmediate ( go );
+			return plane = mesh;
+		}
 	}
 }

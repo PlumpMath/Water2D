@@ -10,8 +10,8 @@ public class WaterPhysicsEditor : Editor
 	{
 		DrawDefaultInspector();
 
-		var waterCont = target as WaterPhysicsController;
-		if ( waterCont == null )
+		var controller = target as WaterPhysicsController;
+		if ( controller == null )
 		{
 			Debug.LogError( "No WaterPhisicsController found!" );
 			return;
@@ -19,13 +19,13 @@ public class WaterPhysicsEditor : Editor
 
 		if ( GUILayout.Button( "Create Joints" ) )
 		{
-			waterCont.Clear();
-			waterCont.CreateJoints( waterCont.Rend );
+			controller.Clear();
+			controller.CreateJoints( controller.GetComponent<SkinnedMeshRenderer>() );
 		}
 
 		if ( GUILayout.Button( "Clear" ) )
 		{
-			waterCont.Clear();
+			controller.Clear();
 		}
 	}
 }

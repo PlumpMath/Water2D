@@ -1,39 +1,31 @@
 ﻿using System;
-using System.Linq.Expressions;
 using UnityEngine;
 
-[RequireComponent(typeof(SkinnedMeshRenderer))]
+[RequireComponent(typeof(SkinnedMeshRenderer), typeof(MeshGenerator))]
 public class WaterPhysicsController : MonoBehaviour
 {
 	public bool useWeightedVertices = true;
 	public int LOD = 9;
 	public int verticesPerJoint = 1;
 	[Range ( 0f, 1f )] public float damping = 0.5f;
+	public ComponentManager manager = new ComponentManager();
 
 	private Transform rootJoint;
 	private Rigidbody2D previousRigidbody2D = null;
-	private SkinnedMeshRenderer rend;
-	public SkinnedMeshRenderer Rend
-	{
-		get
-		{
-			if ( rend != null )
-			{
-				return rend;
-			}
-			return rend = this.GetComponent<SkinnedMeshRenderer>();
-		}
-	}
 
 	private void Awake ()
 	{
-		CreateJoints( Rend );
+		CreateJoints( manager.GetSkinnedMeshRenderer( this.transform ) );
 	}
 
 	// Creates and applies skinned joints to the mesh in passed renderer
 	public void CreateJoints( SkinnedMeshRenderer skinnedRend )
 	{
-		var mesh = new Mesh { name = "Skinned Plane" };
+		// generates mesh
+		var meshGenerator = manager.GetMeshGenerator( this.transform );
+		meshGenerator.LOD = this.LOD * verticesPerJoint;
+		meshGenerator.CreateMesh( skinnedRend );
+		var mesh = skinnedRend.sharedMesh;
 
 		var min = mesh.vertices.GetMin( this.transform );
 		var max = mesh.vertices.GetMax( this.transform );
@@ -61,9 +53,11 @@ public class WaterPhysicsController : MonoBehaviour
 			var joint = new GameObject ( "Joint_" + j);
 			
 			// set position and parent			
-			var pos = Vector3.zero;
-			pos.x = min.x + radius + distX * (j - 1);
-			pos.y = max.y - radius;
+			var pos = new Vector3
+			{
+				x = min.x + radius + distX * ( j - 1 ),
+				y = max.y - radius
+			};
 
 			var jointController = joint.AddComponent<WaterJointController> ();
 			jointController.Initialize ( pos, min, radius, damping, previousRigidbody2D );
@@ -108,13 +102,13 @@ public class WaterPhysicsController : MonoBehaviour
 	public void Clear()
 	{
 		var r = this.GetComponent<SkinnedMeshRenderer> ();
-		r.sharedMesh = Primitives.Quad;
+		r.sharedMesh = Primitives.Plane;
 		r.rootBone = null;
-		var children = this.GetComponentsInChildren<Transform>();
-		for ( int i = 1; i < children.Length; i++ )
+		if ( rootJoint != null )
 		{
-			DestroyImmediate( children[i].gameObject );
+			DestroyImmediate ( rootJoint.gameObject );
 		}
+		rootJoint = null;
 		GC.Collect ();
 	}
 }

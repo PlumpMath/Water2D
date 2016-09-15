@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Content/Scenes/MeshGeneration_Test.unity
+- path: Assets/Content/Scenes/Water2D_Example.unity
   isLoaded: 1
   isActive: 1
