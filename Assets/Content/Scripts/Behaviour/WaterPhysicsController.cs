@@ -28,17 +28,17 @@ public class WaterPhysicsController : MonoBehaviour
 	{
 		// generates mesh
 		var meshGenerator = this.GetComponent<MeshGenerator> ();
+		meshGenerator.LOD = this.LOD;
 		meshGenerator.CreateMesh ( rend );
 		var mesh = rend.sharedMesh;
+		var hull = meshGenerator.hull;
 
 		var minWorld = mesh.vertices.GetMin ( this.transform );
 		var maxWorld = mesh.vertices.GetMax ( this.transform );
-		var width = maxWorld.x - minWorld.x;
-		var distX = width / LOD;
-		var radius = distX / 2;
+		var radius = (( maxWorld.x - minWorld.x ) / (LOD + 1)) / 2;
 
 		// Set joint variables
-		var joints = new Transform[LOD + 1];
+		var joints = new Transform[hull.Length - 1];
 		var weights = new BoneWeight[mesh.vertexCount];
 		var bindPoses = new Matrix4x4[joints.Length];
 
@@ -52,55 +52,37 @@ public class WaterPhysicsController : MonoBehaviour
 		joints[0] = rootJoint;
 		bindPoses[0] = rootJoint.worldToLocalMatrix * this.transform.localToWorldMatrix;
 
-		for (var j = 1; j <= LOD; j++)
+		for ( int j = 0; j < mesh.vertices.Length; j++ )
 		{
-			var joint = new GameObject ( "Joint_" + j );
-
-			// set position and parent			
-			var pos = new Vector3
-			{
-				x = minWorld.x + radius + distX * (j - 1),
-				y = maxWorld.y - radius
-			};
-
-			var jointController = joint.AddComponent<WaterJointController> ();
-			jointController.Initialize ( pos, minWorld, radius, damping, previousRigidbody2D );
-
-			joint.transform.parent = rootJoint;
-			joints[j] = joint.transform;
-			previousRigidbody2D = joint.GetComponent<Rigidbody2D> ();
-
-			// Set bones weights
-			for (int v = 0; v < mesh.vertexCount; v++)
-			{
-				var vertWorldPos = this.transform.TransformPoint ( mesh.vertices[v] );
-				vertWorldPos.y = joints[j].position.y;
-
-				if (vertWorldPos.x >= joints[j].position.x - radius &&
-					 vertWorldPos.x <= joints[j].position.x + radius)
-				{
-					var vertDistX = 1f;
-					if (useWeightedVertices)
-					{
-						vertDistX = Mathf.Abs ( Mathf.Abs ( joints[j].position.x ) - Mathf.Abs ( vertWorldPos.x ) );
-					}
-					weights[v].boneIndex1 = j;
-					weights[v].weight1 = vertDistX * radius * mesh.uv[v].y;
-				}
-
-				weights[v].boneIndex0 = 0;
-				weights[v].weight0 = 1 - weights[v].weight1;
-			}
-
-			// Set bind poses
-			bindPoses[j] = joints[j].worldToLocalMatrix * this.transform.localToWorldMatrix;
+			weights[j].boneIndex0 = 0;
+			weights[j].weight0 = 1;
 		}
 
+		for ( int i = 1; i < joints.Length; i++ )
+		{
+			// create joint
+			var joint = new  GameObject( "Joint_" + i );
+			joints[i] = joint.transform;
+
+			var jointController = joint.AddComponent<WaterJointController> ();
+			var posWorld = this.transform.TransformPoint( mesh.vertices[hull[i]] );
+			posWorld.y -= radius;
+			jointController.Initialize ( posWorld, minWorld, radius, damping, previousRigidbody2D );
+			previousRigidbody2D = joint.GetComponent<Rigidbody2D>();
+			joint.transform.parent = rootJoint;
+			
+			// set bone weights
+			weights[hull[i]].boneIndex0 = i;
+			weights[hull[i]].weight0 = 1;
+
+			// Set bind poses
+			bindPoses[i] = joints[i].worldToLocalMatrix * this.transform.localToWorldMatrix;
+		}
+		
 		// apply to mesh and renderer
 		mesh.boneWeights = weights;
 		mesh.bindposes = bindPoses;
 		rend.bones = joints;
-		rend.sharedMesh = mesh;
 	}
 
 	public void Clear ()
@@ -112,7 +94,7 @@ public class WaterPhysicsController : MonoBehaviour
 		if (root != null)
 		{
 			DestroyImmediate ( root.gameObject );
-			Debug.Log ( "Root destroyed" );
+			//Debug.Log ( "Root destroyed" );
 		}
 		rootJoint = null;
 		GC.Collect ();

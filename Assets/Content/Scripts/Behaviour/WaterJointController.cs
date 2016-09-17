@@ -58,7 +58,6 @@ public class WaterJointController : MonoBehaviour
 			return;
 		}
 		
-		Debug.Log( this.name + " hit " + collision.name );
 		// apply impact force
 		var force = collision.attachedRigidbody.velocity.y * forceScalar;
 		rigid2D.AddForce( Vector2.up * force );

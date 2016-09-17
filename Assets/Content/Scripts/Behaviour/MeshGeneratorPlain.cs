@@ -15,16 +15,17 @@ public class MeshGeneratorPlain : MeshGenerator
 		// calculate vertices
 		var vertices = new Vector3[base.LOD * 2 + 4];
 		int halfLength = vertices.Length / 2;
+		base.hull = new int[halfLength];
+
 		for ( var i = 0; i <= halfLength; i++ )
 		{
 			vertices[i] = new Vector3 ( -width/2 + deltaDistance * i, -height/2, 0 );
 		}
 		
-		base.hull = new int[ halfLength ];
 		for ( var j = 0; j < halfLength; j++ )
 		{
 			vertices[j + halfLength] = new Vector3 ( -width/2 + deltaDistance * j, height/2, 0 );
-			base.hull[j] = j;
+			base.hull[j] = j + halfLength;
 		}
 
 		// calculate triangles
