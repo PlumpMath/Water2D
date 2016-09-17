@@ -30,8 +30,10 @@ public class WaterJointController : MonoBehaviour
 			if (dist < distanceToBottom)
 			{
 				springJoint2D.dampingRatio = (1 - (0.5f + (dist / distanceToBottom))) * 10;
-				if (this.name == "Joint_5")
-					Debug.Log ( this.name + " Damping Ratio: " + springJoint2D.dampingRatio );
+				//if ( this.name == "Joint_5" )
+				//{
+				//	Debug.Log ( this.name + " Damping Ratio: " + springJoint2D.dampingRatio );
+				//}
 			}
 		}
 
@@ -55,13 +57,14 @@ public class WaterJointController : MonoBehaviour
 			Debug.LogWarning( collision.name + " has no Rigidbody2D assigned." );
 			return;
 		}
+		
 		Debug.Log( this.name + " hit " + collision.name );
 		// apply impact force
 		var force = collision.attachedRigidbody.velocity.y * forceScalar;
 		rigid2D.AddForce( Vector2.up * force );
 	}
 
-	public void Initialize ( Vector2 position, Vector2 min, float radius, float damping )
+	public void Initialize ( Vector2 position, Vector2 minWorld, float radius, float damping )
 	{
 		// set transform
 		this.transform.position = position;
@@ -84,15 +87,15 @@ public class WaterJointController : MonoBehaviour
 		// add spring joint
 		this.springJoint2D = this.gameObject.AddComponent<SpringJoint2D> ();
 		this.springJoint2D.autoConfigureDistance = false;
-		this.springJoint2D.distance = distanceToBottom = Mathf.Abs ( Mathf.Abs ( position.y ) - Mathf.Abs ( min.y ) );
-		this.springJoint2D.connectedAnchor = new Vector2 ( position.x, min.y );
+		this.springJoint2D.connectedAnchor = new Vector2 ( position.x, minWorld.y );
+		this.springJoint2D.distance = distanceToBottom = position.y - minWorld.y;
 		this.springJoint2D.frequency = damping;
 		this.springJoint2D.dampingRatio = damping / 10;
 	}
 
-	public void Initialize( Vector2 position, Vector2 min, float radius, float damping, Rigidbody2D previousRigidbody )
+	public void Initialize( Vector2 position, Vector2 minWorld, float radius, float damping, Rigidbody2D previousRigidbody )
 	{
-		Initialize( position, min, radius, damping );
+		Initialize( position, minWorld, radius, damping );
 		if ( previousRigidbody == null ) return;
 		var springConnect = this.gameObject.AddComponent<SpringJoint2D> ();
 		springConnect.autoConfigureDistance = false;
