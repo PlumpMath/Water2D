@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaterPhysicsController : MonoBehaviour
 {
 	// public fields
-	public bool useWeightedVertices = true;
+	public bool createOnAwake = true;
 	public int LOD = 9;
 	public int verticesPerJoint = 1;
 	[Range ( 0f, 1f )]
@@ -18,10 +18,15 @@ public class WaterPhysicsController : MonoBehaviour
 
 	private void Awake()
 	{
+		if ( !createOnAwake ) return;
 		Clear();
-		CreateJoints( this.GetComponent<SkinnedMeshRenderer>() );
+		CreateJoints();
 	}
 
+	public void CreateJoints()
+	{
+		CreateJoints( this.GetComponent<SkinnedMeshRenderer> () );
+	}
 
 	// Creates and applies skinned joints to the mesh in passed renderer
 	public void CreateJoints ( SkinnedMeshRenderer rend )

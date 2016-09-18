@@ -9,11 +9,6 @@ public abstract class MeshGenerator : MonoBehaviour
 	public int LOD = 3;
 	[HideInInspector] public int[] hull;
 
-	public void Awake()
-	{
-		CreateMesh();
-	}
-
 	public void CreateMesh()
 	{
 		CreateMesh( this.GetComponent<SkinnedMeshRenderer>() );

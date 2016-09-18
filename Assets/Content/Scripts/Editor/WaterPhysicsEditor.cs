@@ -20,7 +20,7 @@ public class WaterPhysicsEditor : Editor
 		if ( GUILayout.Button( "Create Joints" ) )
 		{
 			controller.Clear();
-			controller.CreateJoints( controller.GetComponent<SkinnedMeshRenderer>() );
+			controller.CreateJoints();
 		}
 
 		if ( GUILayout.Button( "Clear" ) )

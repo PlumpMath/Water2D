@@ -3,7 +3,7 @@
 //[RequireComponent( typeof (Rigidbody2D), typeof (SpringJoint2D), typeof(CircleCollider2D) )]
 public class WaterJointController : MonoBehaviour
 {
-	public float forceScalar = 0.005f;
+	public float forceScalar = 0.003f;
 	private CircleCollider2D circleCollider2D;
 	private SpringJoint2D springJoint2D;
 	private float distanceToBottom;
@@ -30,10 +30,6 @@ public class WaterJointController : MonoBehaviour
 			if (dist < distanceToBottom)
 			{
 				springJoint2D.dampingRatio = (1 - (0.5f + (dist / distanceToBottom))) * 10;
-				//if ( this.name == "Joint_5" )
-				//{
-				//	Debug.Log ( this.name + " Damping Ratio: " + springJoint2D.dampingRatio );
-				//}
 			}
 		}
 
