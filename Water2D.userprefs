@@ -1,6 +1,10 @@
 ﻿<Properties StartupItem="Water2D.CSharp.Plugins.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Content\Materials\Shader\BumpRefractionLightRay.shader">
+    <Files>
+      <File FileName="Assets\Content\Materials\Shader\BumpRefractionLightRay.shader" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
